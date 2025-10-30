@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatisation Posts LinkedIn - Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .linkedin-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #0077b5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .response-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .response-message.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .response-message.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .response-message h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .response-message p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .test-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        .test-note strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="linkedin-icon">in</div>
+        
+        <div class="header">
+            <h1>🚀 Automatisation LinkedIn</h1>
+            <p>Testez votre workflow n8n</p>
+        </div>
+
+        <div class="test-note">
+            <strong>⚠️ Note de test :</strong>
+            N'oubliez pas de remplacer l'URL du webhook ci-dessous par celle générée dans votre workflow n8n !
+        </div>
+
+        <form id="linkedinForm">
+            <div class="form-group">
+                <label for="titre">Titre du post *</label>
+                <input 
+                    type="text" 
+                    id="titre" 
+                    name="titre" 
+                    placeholder="Ex: Nouvelle étape dans ma carrière"
+                    required
+                    maxlength="100"
+                >
+                <div class="char-count"><span id="titreCount">0</span>/100</div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    placeholder="Décrivez votre post... L'IA va l'améliorer automatiquement !"
+                    required
+                    maxlength="3000"
+                ></textarea>
+                <div class="char-count"><span id="descCount">0</span>/3000</div>
+            </div>
+
+            <div class="form-group">
+                <label for="image">URL de l'image (optionnel)</label>
+                <input 
+                    type="url" 
+                    id="image" 
+                    name="image" 
+                    placeholder="https://exemple.com/mon-image.jpg"
+                >
+                <div class="hint">💡 Laissez vide pour un post texte uniquement</div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+                📤 Publier sur LinkedIn
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Traitement en cours...</p>
+        </div>
+
+        <div class="response-message" id="responseMessage"></div>
+    </div>
+
+    <script>
+        // ⚠️ REMPLACEZ CETTE URL PAR VOTRE WEBHOOK N8N
+        const WEBHOOK_URL = 'https://n8n-latest-yzon.onrender.com/webhook-test/linkedin-post';
+
+        const form = document.getElementById('linkedinForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const responseMessage = document.getElementById('responseMessage');
+        const titreInput = document.getElementById('titre');
+        const descInput = document.getElementById('description');
+
+        // Compteurs de caractères
+        titreInput.addEventListener('input', (e) => {
+            document.getElementById('titreCount').textContent = e.target.value.length;
+        });
+
+        descInput.addEventListener('input', (e) => {
+            document.getElementById('descCount').textContent = e.target.value.length;
+        });
+
+        // Soumission du formulaire
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Vérification de l'URL webhook
+            if (WEBHOOK_URL.includes('votre-instance-n8n')) {
+                showResponse(false, 'Erreur de configuration', 
+                    'Vous devez remplacer WEBHOOK_URL dans le code avec l\'URL de votre webhook n8n !');
+                return;
+            }
+
+            // Préparation des données
+            const formData = {
+                titre: titreInput.value.trim(),
+                description: descInput.value.trim(),
+                image: document.getElementById('image').value.trim()
+            };
+
+            // Afficher le loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ En cours...';
+            loading.style.display = 'block';
+            responseMessage.style.display = 'none';
+
+            try {
+                // Envoi à n8n
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showResponse(true, 'Publication réussie ! 🎉', 
+                        `Titre optimisé: ${result.titreOptimise}<br>
+                         Meilleur moment suggéré: ${result.meilleurMomentSuggere}<br>
+                         Image incluse: ${result.avecImage ? 'Oui ✅' : 'Non'}<br>
+                         Hashtags: ${result.hashtags.join(', ')}`
+                    );
+                    form.reset();
+                    document.getElementById('titreCount').textContent = '0';
+                    document.getElementById('descCount').textContent = '0';
+                } else {
+                    showResponse(false, 'Erreur lors de la publication', 
+                        result.message || 'Une erreur est survenue');
+                }
+            } catch (error) {
+                showResponse(false, 'Erreur de connexion', 
+                    `Impossible de contacter le serveur n8n.<br>
+                     Erreur: ${error.message}<br>
+                     Vérifiez que votre workflow est actif et que l'URL webhook est correcte.`);
+            } finally {
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📤 Publier sur LinkedIn';
+                loading.style.display = 'none';
+            }
+        });
+
+        function showResponse(success, title, message) {
+            responseMessage.className = 'response-message ' + (success ? 'success' : 'error');
+            responseMessage.innerHTML = `
+                <h3>${success ? '✅' : '❌'} ${title}</h3>
+                <p>${message}</p>
+            `;
+            responseMessage.style.display = 'block';
+        }
+
+        // Exemples de test (optionnel)
+        function chargerExemple() {
+            titreInput.value = "Nouvelle étape professionnelle";
+            descInput.value = "Je suis ravi d'annoncer que j'ai rejoint une nouvelle entreprise en tant que développeur. Hâte de relever de nouveaux défis !";
+            document.getElementById('titreCount').textContent = titreInput.value.length;
+            document.getElementById('descCount').textContent = descInput.value.length;
+        }
+
+        // Décommenter pour charger automatiquement un exemple au chargement
+        // chargerExemple();
+    </script>
+</body>
+</html>
